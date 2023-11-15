@@ -1,30 +1,37 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
+import { View, TextInput, Button, Text, Alert, StyleSheet } from 'react-native';
 
-const ContarIslotes = () => {
-  const [frase, setFrase] = useState('');
-  const [resultado, setResultado] = useState(0);
+const App = () => {
+  const [input, setInput] = useState('');
+  const [output, setOutput] = useState('');
+  const [number, setNumber] = useState('');
 
-  const calcularIslotes = () => {
-    let contador = 0;
-    for (let i = 1; i < frase.length - 1; i++) {
-      if (frase[i] !== frase[i - 1] && frase[i] !== frase[i + 1]) {
-        contador++;
-      }
+  const reverseText = () => {
+    setOutput(input.split('').reverse().join(''));
+  };
+
+  const showVowels = () => {
+    setOutput(input.replace(/[^aeiou]/gi, ''));
+  };
+
+  const showSequence = () => {
+    const num = parseInt(number, 10);
+    if (isNaN(num) || num < 1 || num > 100) {
+      Alert.alert('Número fuera de rango');
+    } else {
+      setOutput(Array.from({ length: num }, (_, i) => i + 1).join(', '));
     }
-    setResultado(contador);
   };
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Introduce una frase"
-        value={frase}
-        onChangeText={setFrase}
-      />
-      <Button title="Calcular Islotes" onPress={calcularIslotes} />
-      <Text>Resultado: {resultado}</Text>
+      <TextInput onChangeText={setInput} placeholder="Ingresa texto aquí" style={styles.input} />
+      <Button title="Invertir texto" onPress={reverseText} />
+      <Button title="Mostrar vocales" onPress={showVowels} />
+      <Text style={styles.output}>{output}</Text>
+
+      <TextInput onChangeText={setNumber} placeholder="Ingresa un número entre 1 y 100" style={styles.input} />
+      <Button title="Mostrar secuencia" onPress={showSequence} />
     </View>
   );
 };
@@ -37,15 +44,14 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '80%',
-    height: 40,
     borderColor: 'gray',
     borderWidth: 1,
     marginBottom: 10,
-    padding: 10,
+  },
+  output: {
+    marginVertical: 10,
   },
 });
 
-export default ContarIslotes;
-
-
+export default App;
 
